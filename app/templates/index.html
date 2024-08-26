@@ -6,9 +6,9 @@
     <title>I C EVERYTHING</title>
 </head>
 <body>
-    <h1>POINT YOUR TELESCOPE</h1>
+    <h1>Hello 남원!</h1>
     <form method="POST">
-        <label for="body">Select Celestial Body</label>
+        <label for="body">머 볼까</label>
         <select id="body" name="body">
             {% for planet in planets %}
                 <option value="{{ planet }}">{{ planet.capitalize() }}</option>
@@ -16,8 +16,9 @@
         </select>
         <input type="submit" value="Get Position">
     </form>
+    <div><h2>타겟 위치: </h2></div>
     <div id="result"></div>
-
+    <div id="details"></div>
     <script>
         document.querySelector('form').onsubmit = async (event) => {
             event.preventDefault();
@@ -30,6 +31,25 @@
             const data = await response.json();
             document.getElementById('result').innerHTML = 
                 `Altitude: ${data.altitude.toFixed(2)}°, Azimuth: ${data.azimuth.toFixed(2)}°`
+            const names = {
+                'mercury': '수성', 
+                'venus': '금성', 
+                'mars': '화성', 
+                'jupiter': '목성', 
+                'saturn': '토성', 
+                'uranus': '천왕성', 
+                'neptune': '해왕성'
+            }
+            const details = `
+                <h3>${names[form.body.value]} 보는 법</h3>
+                <ol>
+                    <li>나침반이 망원경에 고정되어있다고 가정하고,</li> 
+                    <li>바늘이 N을 가리키게 한 후,</li>
+                    <li>시계 방향으로 ${data.azimuth.toFixed(2)}°만큼 망원경을 돌립니다.</li>
+                    <li>좌 우를 고정시키고,</li>
+                    <li>망원경과 지(수)평선이 ${data.altitude.toFixed(2)}°가 되도록 위아래로 조절합니다.</li>
+                </ol>`
+            document.getElementById('details').innerHTML = details
         };
     </script>
 </body>

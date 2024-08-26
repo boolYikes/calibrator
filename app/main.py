@@ -18,8 +18,15 @@ def index():
 def get_planet_position(body):
     ts = load.timescale()
     t = ts.now()
-
-    planet = eph[body]
+    planets = {
+        'mercury': 'mercury', 
+        'venus': 'venus', 
+        'mars': 'mars', 
+        'jupiter': 'jupiter barycenter', 
+        'saturn': 'saturn barycenter', 
+        'uranus': 'uranus barycenter', 
+        'neptune': 'neptune barycenter'}
+    planet = eph[planets[body]]
     earth = eph['earth']
 
     ip_loc = geocoder.ip('me')
@@ -27,13 +34,7 @@ def get_planet_position(body):
     user_pos = earth + wgs84.latlon(ip_loc.latlng[0] * N, ip_loc.latlng[1] * W)
     astrometric = user_pos.at(t).observe(planet)
     alt, az, d = astrometric.apparent().altaz()
-
-    return {'altitude': alt.degrees, 'azimuth': az.degrees, 'd_param': d}
-
-@app.route('/location', methods=['GET'])
-def get_location():
-    g = geocoder.ip('me')
-    return jsonify({'latitude': g.latlng[0], 'longitude': g.latlng[1], 'elevation': g.alt})
+    return {'altitude': alt.degrees, 'azimuth': az.degrees}
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)

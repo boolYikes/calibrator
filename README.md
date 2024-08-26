@@ -6,3 +6,7 @@ good calibration makes for a good observation :)
 
 ## ETC
 Don't mind the teeny jupyter notebook!
+
+## TODOS
+- realtime position display
+- pretty it up a bit
