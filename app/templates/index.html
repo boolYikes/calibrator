@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I C EVERYTHING</title>
+</head>
+<body>
+    <h1>POINT YOUR TELESCOPE</h1>
+    <form method="POST">
+        <label for="body">Select Celestial Body</label>
+        <select id="body" name="body">
+            {% for planet in planets %}
+                <option value="{{ planet }}">{{ planet.capitalize() }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Get Position">
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.querySelector('form').onsubmit = async (event) => {
+            event.preventDefault();
+            const form = event.target;
+            const body = form.body.value;
+            const response = await fetch('/', {
+                method: 'POST',
+                body: new URLSearchParams(new FormData(form))
+            });
+            const data = await response.json();
+            document.getElementById('result').innerHTML = 
+                `Altitude: ${data.altitude.toFixed(2)}°, Azimuth: ${data.azimuth.toFixed(2)}°`
+        };
+    </script>
+</body>
+</html>
